@@ -43,7 +43,8 @@ Our company: Coding for Cats LLC
 Expertise: Rust/TypeScript backend, React/Leptos frontend, APIs, ML/LLM, databases, cloud (Railway/Vercel)
 Suggested Rate: ${rate}/hour
 
-Write ONLY the proposal text, no headers or meta-commentary."""
+Write ONLY the proposal text, no headers or meta-commentary.
+Be conversational, confident, and specific to their job."""
 
 def load_config():
     with open(CONFIG_PATH) as f:

@@ -23,15 +23,26 @@ All components run autonomously via cron jobs, 24/7.
 
 ## Project Status
 
-### ✅ Completed
+### ✅ Completed (Full Feature Set)
 
+**Core Components:**
 - [x] Database schema (SQLite: jobs, bids, responses tables)
 - [x] Configuration system (credentials, filters, settings)
 - [x] Scraper implementation (Playwright, anti-bot protection)
 - [x] Evaluator implementation (Claude API integration)
 - [x] Bidder implementation (Claude proposal generation, form submission)
 - [x] Tracker implementation (response polling, win detection)
+
+**Revenue Features:**
+- [x] Enhanced Proposals (portfolio + past work + custom analysis)
+- [x] Analytics Dashboard (metrics + revenue projections)
+- [x] Response Automation (auto-reply to common questions)
+- [x] Win Automation (GitHub issues + Discord notifications)
+- [x] Invoice Generator (PDF invoices + auto-send)
+
+**Deployment:**
 - [x] Setup & deployment scripts
+- [x] Test suite
 
 ### ⏳ In Progress
 
@@ -43,11 +54,11 @@ All components run autonomously via cron jobs, 24/7.
 
 | Date | Milestone | Status |
 |------|-----------|--------|
-| Mar 11 | Setup + DB + Scraper + Evaluator | ✅ Complete |
-| Mar 11 | Bidder + Tracker | ✅ Complete |
+| Mar 11 | Core MVP (5 components) | ✅ Complete |
+| Mar 11 | Revenue Features (5 modules) | ✅ Complete |
 | Mar 12-13 | Full integration test | 🔨 Testing |
 | Mar 14-15 | Cron deployment + QA | ⏳ Next |
-| Mar 15 | **MVP Shipped** | 🎯 Target |
+| Mar 15 | **Full System Shipped** | 🎯 Target |
 | Mar 15-18 | Start bidding (5/day) | 📋 Queued |
 | Apr 1-7 | First payments | 💰 Target |
 
@@ -210,6 +221,42 @@ Discord notification on wins
 
 ## Key Features
 
+### Core Automation
+- **Scraper** — Find jobs via Playwright (every 2 hours)
+- **Evaluator** — Claude AI scores jobs (every 1 hour)
+- **Bidder** — Generate & submit proposals (2x per day)
+- **Tracker** — Monitor responses (every 6 hours)
+
+### Revenue Features (NEW)
+- **Enhanced Proposals** — Portfolio-driven, customized per category
+  - Reference past work (UseAllMyPoints, Adria MTG, etc.)
+  - Tech stack matching (Rust/TS, React/Leptos, APIs, ML/LLM)
+  - Custom fit analysis for each job
+  - 15-25% higher win rate expected
+
+- **Analytics Dashboard** — Real-time metrics
+  - Bid count, response rate, win rate
+  - Revenue pipeline forecast
+  - Category performance breakdown
+  - Export to JSON for BI integration
+
+- **Response Automation** — AI-powered replies
+  - Classify client messages (rate question, timeline, tech, etc.)
+  - Auto-generate professional replies
+  - Mark for auto-send or manual review
+
+- **Win Automation** — Project orchestration
+  - Auto-create GitHub issues when you win
+  - Assign to team members
+  - Send Discord notifications
+  - Link to project tracking
+
+- **Invoice Generator** — Revenue collection
+  - Auto-generate PDF invoices
+  - Track payment status
+  - Schedule automatic reminders
+  - Calculate hours from project duration
+
 ### Anti-Bot Protection
 - Real Playwright browser (not API abuse)
 - Random 2-5 second delays between actions (scraper: 2-5s, bidder: 5-10s)
@@ -224,6 +271,7 @@ Discord notification on wins
 - Client quality filtering (rating ≥ 4.0)
 - Rate competitiveness check ($50-500/hr)
 - Strategic fit assessment
+- Portfolio-aware proposals
 
 ### Error Handling & Logging
 - Comprehensive logging to file + stdout
@@ -291,17 +339,28 @@ upwork-agent/
 │   └── upwork_config.json             # Config (credentials, filters)
 ├── db/
 │   └── jobs.sqlite                    # SQLite database
+├── invoices/                          # Generated invoices
 ├── src/
 │   ├── db_init.py                     # Initialize database schema ✅
 │   ├── scraper.py                     # Scrape Upwork jobs ✅
 │   ├── evaluator.py                   # Evaluate with Claude ✅
 │   ├── bidder.py                      # Generate & submit proposals ✅
-│   └── tracker.py                     # Monitor responses ✅
+│   ├── tracker.py                     # Monitor responses ✅
+│   ├── enhanced_proposals.py          # Custom proposals (portfolio + fit) ✅
+│   ├── analytics.py                   # Dashboard (metrics + projections) ✅
+│   ├── response_automation.py         # Auto-reply to messages ✅
+│   ├── win_automation.py              # Create GitHub issues on wins ✅
+│   └── invoice_generator.py           # Generate & send invoices ✅
 └── logs/
     ├── scraper.log                    # Scraper execution log
     ├── evaluator.log                  # Evaluator execution log
     ├── bidder.log                     # Bidder execution log
-    └── tracker.log                    # Tracker execution log
+    ├── tracker.log                    # Tracker execution log
+    ├── proposals.log                  # Enhanced proposals log
+    ├── analytics.log                  # Analytics dashboard log
+    ├── responses.log                  # Response automation log
+    ├── wins.log                       # Win automation log
+    └── invoices.log                   # Invoice generator log
 ```
 
 ---
