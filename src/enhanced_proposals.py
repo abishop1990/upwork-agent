@@ -11,6 +11,7 @@ import sqlite3
 import logging
 from pathlib import Path
 from anthropic import Anthropic
+from src.humanizer import Humanizer
 
 LOG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "logs" / "proposals.log"
 
@@ -195,7 +196,16 @@ def generate_custom_proposal(job_data, rate):
             messages=[{"role": "user", "content": prompt}]
         )
         proposal = response.content[0].text
+        
+        # Humanize the proposal (remove AI artifacts)
+        humanizer = Humanizer()
+        ai_score_before = humanizer.score_ai_artifacts(proposal)
+        proposal = humanizer.humanize(proposal)
+        ai_score_after = humanizer.score_ai_artifacts(proposal)
+        
         logger.info(f"  ✅ Proposal generated ({len(proposal)} chars)")
+        logger.info(f"  🎭 Humanized: AI score {ai_score_before} → {ai_score_after}")
+        
         return proposal
     except Exception as e:
         logger.error(f"Error generating proposal: {e}")

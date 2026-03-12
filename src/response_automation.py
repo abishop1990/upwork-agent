@@ -11,6 +11,7 @@ import sqlite3
 import logging
 from pathlib import Path
 from anthropic import Anthropic
+from src.humanizer import Humanizer
 
 LOG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "logs" / "responses.log"
 DB_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "db" / "jobs.sqlite"
@@ -75,6 +76,14 @@ def classify_and_reply(message, job_title, rate):
                 msg_type = line.replace("TYPE:", "").strip()
             elif line.startswith("REPLY:"):
                 reply = line.replace("REPLY:", "").strip()
+        
+        # Humanize the reply (remove AI artifacts)
+        if reply:
+            humanizer = Humanizer()
+            ai_score_before = humanizer.score_ai_artifacts(reply)
+            reply = humanizer.humanize(reply)
+            ai_score_after = humanizer.score_ai_artifacts(reply)
+            logger.info(f"🎭 Humanized reply: AI score {ai_score_before} → {ai_score_after}")
         
         return {
             "type": msg_type,
