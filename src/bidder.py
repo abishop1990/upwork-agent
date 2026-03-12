@@ -15,8 +15,11 @@ from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 from anthropic import Anthropic
+from src.config_loader import get_config, validate_config
+from src.prompt_injection_protection import (
+    validate_job_data, build_safe_prompt, validate_claude_response
+)
 
-CONFIG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "config" / "upwork_config.json"
 DB_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "db" / "jobs.sqlite"
 LOG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "logs" / "bidder.log"
 
@@ -172,7 +175,8 @@ def main():
     logger.info("[UPWORK BIDDER] Starting...")
     
     try:
-        config = load_config()
+        config = get_config()
+        validate_config(config)
     except Exception as e:
         logger.error(f"Failed to load config: {e}")
         return

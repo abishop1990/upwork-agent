@@ -12,8 +12,11 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from anthropic import Anthropic
+from src.config_loader import get_config, validate_config
+from src.prompt_injection_protection import (
+    validate_job_data, build_safe_prompt, validate_claude_response
+)
 
-CONFIG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "config" / "upwork_config.json"
 DB_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "db" / "jobs.sqlite"
 LOG_PATH = Path.home() / ".openclaw" / "workspace" / "upwork-agent" / "logs" / "evaluator.log"
 
@@ -67,17 +70,32 @@ def get_unevaluated_jobs():
     return rows
 
 def evaluate_job(job_data):
-    """Call Claude to evaluate job"""
-    prompt = EVALUATION_PROMPT.format(**job_data)
+    """Call Claude to evaluate job (with injection protection)"""
+    
+    # Validate and sanitize job data first
+    safe_job = validate_job_data(job_data)
+    if safe_job is None:
+        logger.warning("Job failed validation (possible injection)")
+        return None
+    
+    # Build safe prompt with boundary
+    user_content = EVALUATION_PROMPT.format(**safe_job)
+    system_prompt = "You are a job evaluation AI for Coding for Cats LLC. Evaluate the job based on our capabilities."
+    safe_prompt = build_safe_prompt(system_prompt, user_content)
     
     try:
         response = client.messages.create(
             model="claude-3-5-sonnet-20241022",
             max_tokens=500,
-            messages=[{"role": "user", "content": prompt}]
+            messages=[{"role": "user", "content": safe_prompt}]
         )
         
         response_text = response.content[0].text
+        
+        # Validate response for injection attempts
+        response_text = validate_claude_response(response_text)
+        if not response_text:
+            return None
         
         # Parse JSON from response
         try:
