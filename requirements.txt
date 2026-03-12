@@ -1,0 +1,4 @@
+playwright==1.40.0
+anthropic==0.21.0
+sqlite3
+python-dotenv==1.0.0

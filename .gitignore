@@ -1,0 +1,16 @@
+*.sqlite
+*.sqlite3
+*.log
+__pycache__/
+.env
+.DS_Store
+config/upwork_config.json
+logs/*.log
+*.pyc
+.idea/
+.vscode/
+*.swp
+*.swo
+*.egg-info/
+dist/
+build/
