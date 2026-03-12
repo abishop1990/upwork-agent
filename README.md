@@ -29,22 +29,24 @@ All components run autonomously via cron jobs, 24/7.
 - [x] Configuration system (credentials, filters, settings)
 - [x] Scraper implementation (Playwright, anti-bot protection)
 - [x] Evaluator implementation (Claude API integration)
+- [x] Bidder implementation (Claude proposal generation, form submission)
+- [x] Tracker implementation (response polling, win detection)
+- [x] Setup & deployment scripts
 
 ### ⏳ In Progress
 
-- [ ] Bidder implementation (proposal generation, form submission)
-- [ ] Tracker implementation (response polling, win detection)
-- [ ] Cron scheduling
+- [ ] Cron scheduling & deployment
 - [ ] QA & integration testing
+- [ ] Production deployment
 
 ### Timeline
 
 | Date | Milestone | Status |
 |------|-----------|--------|
-| Mar 11 | Setup + DB | ✅ Complete |
-| Mar 12-13 | Scraper + Evaluator tests | 🔨 Testing |
-| Mar 12-13 | Bidder + Tracker code | ⏳ In progress |
-| Mar 14-15 | Full QA + Cron deployment | ⏳ Pending |
+| Mar 11 | Setup + DB + Scraper + Evaluator | ✅ Complete |
+| Mar 11 | Bidder + Tracker | ✅ Complete |
+| Mar 12-13 | Full integration test | 🔨 Testing |
+| Mar 14-15 | Cron deployment + QA | ⏳ Next |
 | Mar 15 | **MVP Shipped** | 🎯 Target |
 | Mar 15-18 | Start bidding (5/day) | 📋 Queued |
 | Apr 1-7 | First payments | 💰 Target |
@@ -210,10 +212,11 @@ Discord notification on wins
 
 ### Anti-Bot Protection
 - Real Playwright browser (not API abuse)
-- Random 2-5 second delays between actions
+- Random 2-5 second delays between actions (scraper: 2-5s, bidder: 5-10s)
 - Human-like scroll patterns
 - Rate limiting (5 bids/day max)
 - Monitoring for Upwork blocks
+- Spread bidding across 2x per day (9:30 AM, 3:30 PM)
 
 ### Smart Job Evaluation
 - Claude Sonnet for fast, accurate scoring
@@ -280,17 +283,20 @@ Discord notification on wins
 upwork-agent/
 ├── README.md                          # This file
 ├── requirements.txt                   # Python dependencies
+├── setup.sh                           # One-command setup script
+├── deploy_cron.sh                     # Deploy cron jobs
+├── test_all.sh                        # Run all tests
 ├── .gitignore
 ├── config/
 │   └── upwork_config.json             # Config (credentials, filters)
 ├── db/
 │   └── jobs.sqlite                    # SQLite database
 ├── src/
-│   ├── db_init.py                     # Initialize database schema
-│   ├── scraper.py                     # Scrape Upwork jobs
-│   ├── evaluator.py                   # Evaluate with Claude
-│   ├── bidder.py                      # Generate & submit proposals (TBD)
-│   └── tracker.py                     # Monitor responses (TBD)
+│   ├── db_init.py                     # Initialize database schema ✅
+│   ├── scraper.py                     # Scrape Upwork jobs ✅
+│   ├── evaluator.py                   # Evaluate with Claude ✅
+│   ├── bidder.py                      # Generate & submit proposals ✅
+│   └── tracker.py                     # Monitor responses ✅
 └── logs/
     ├── scraper.log                    # Scraper execution log
     ├── evaluator.log                  # Evaluator execution log
