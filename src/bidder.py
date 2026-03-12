@@ -32,19 +32,27 @@ logger = logging.getLogger(__name__)
 
 client = Anthropic()
 
-PROPOSAL_PROMPT = """Write a compelling Upwork proposal for this job. Keep it under 400 words.
+PROPOSAL_PROMPT = """Write a proposal. Sound like a real founder.
 
-Job Title: {title}
-Description: {description}
+Job: {title}
+Details: {description}
 Budget: {budget}
 Duration: {duration}
 
-Our company: Coding for Cats LLC
-Expertise: Rust/TypeScript backend, React/Leptos frontend, APIs, ML/LLM, databases, cloud (Railway/Vercel)
-Suggested Rate: ${rate}/hour
+Expertise: Rust/TypeScript backend, React/Leptos frontend, APIs, ML/LLM, databases, cloud
+Rate: ${rate}/hour
 
-Write ONLY the proposal text, no headers or meta-commentary.
-Be conversational, confident, and specific to their job."""
+Write 300-400 words. Rules:
+1. Start with "Hey" or similar. Sound casual.
+2. Show you read their job. Reference something specific.
+3. Say what you'd do in 1-2 sentences. Be direct.
+4. Mention relevant tech you've used.
+5. Timeline: "We can start immediately" or similar.
+6. Close: "Let's chat" or "Ready to get started"
+
+NO corporate language. NO "leverage", "synergize", "solutions".
+Sound like someone who builds things. Confident but not arrogant.
+Real person. Real work. Real pitch."""
 
 def load_config():
     with open(CONFIG_PATH) as f:

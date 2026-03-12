@@ -81,28 +81,29 @@ PORTFOLIO = {
     }
 }
 
-CUSTOM_PROPOSAL_PROMPT = """You are a senior proposal writer for Coding for Cats LLC.
+CUSTOM_PROPOSAL_PROMPT = """Write a proposal that sounds like a real founder, not a consultant.
 
-Job Title: {title}
-Job Description: {description}
-Client: {client_name}
+Job: {title}
+Details: {description}
 Budget: {budget}
-Duration: {duration}
+Timeline: {duration}
 
-Our Relevant Experience:
+Our work:
 {portfolio}
 
-Why We're Perfect for This:
+Why we fit:
 {analysis}
 
-Write a compelling, personalized Upwork proposal (350-450 words):
-1. Open with specific understanding of their need
-2. Reference relevant past work (make it concrete)
-3. Explain our approach (not generic, specific to their job)
-4. Confidence + timeline + communication
-5. Close with clear next step
+Write 300-400 words. Sound like a real person:
+- Start casual: "Hey, I've built similar systems"
+- Be specific: Name actual tech, past work, concrete examples
+- Show you read their job: Mention something from their description
+- Explain your approach: "Here's how we'd tackle this..."
+- Be confident but not arrogant: "This is straightforward for us"
+- Clear next step: "Let's jump on a quick call"
 
-Be conversational, confident, and specific. No generic platitudes."""
+NO corporate speak. NO "I'd be happy to". NO "leverage" or "synergistic".
+Sound like someone who's built real products. Direct. Confident. Real."""
 
 def detect_category(job_data):
     """Detect job category from title + description"""
